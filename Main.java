@@ -1,4 +1,5 @@
 import java.util.concurrent.TimeUnit;
+import java.util.Arrays;
 //import java.util.Random;
 import java.util.Scanner;
 import java.time.LocalTime;
@@ -31,7 +32,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         Scanner scan = new Scanner(System.in);
 
-        String test[] = new String[100];
+        //String test[] = new String[100];
         Vector <String> testpsg = new Vector <String>();
 
         // String test="";
@@ -90,30 +91,42 @@ public class Main {
 
         System.out.println("\n\n");
 
+        System.out.println("Start typing after you see [START] in:");
         System.out.println("3");
         TimeUnit.SECONDS.sleep(1);
         System.out.println("2");
         TimeUnit.SECONDS.sleep(1);
         System.out.println("1");
         TimeUnit.SECONDS.sleep(1);
-        System.out.println("Start\n\n");
+        System.out.println("[START]\n");
         // TimeUnit.SECONDS.sleep(1);
 
         double start = LocalTime.now().toNanoOfDay();
         scan.nextLine();
         String typedWords = scan.nextLine();
         String typed[] = typedWords.split(" ");
-        // System.out.println(typedWords);
+        Vector <String> typedpsg = new Vector <String>(Arrays.asList(typed));
+        
+        while (true) {
+            if (typedpsg.get(0) == " ") {
+                typedpsg.remove(0);
+                continue;
+            }
+            break;
+        }
+
+        for (int i = 0; i < typedpsg.size(); i++) {
+            System.out.println(typedpsg.get(i));
+        }
+
         double end = LocalTime.now().toNanoOfDay();
         // int errors = 0;
         // float accuracy = 0;
-        int errors = accuracyCheck(testpsg, typed);
+        int errors = accuracyCheck(testpsg, typedpsg);
         // System.out.println((test.length-errors) / 10 );
-        float accuracy = ((float) (test.length - errors) / test.length) * 100;
-
+        float accuracy = ((float) (testpsg.size() - errors) / testpsg.size()) * 100;
         double timeElapsed = end - start;
         double seconds = timeElapsed / 1000000000.0;
-
         // System.out.println(seconds);
         int numChars = typedWords.length();
         int wpm = (int) ((((double) numChars / 6) / seconds) * 60);
@@ -123,21 +136,23 @@ public class Main {
         scan.close();
     }
 
-    static int accuracyCheck(Vector<String> test, String[] typed) {
+    static int accuracyCheck(Vector<String> test, Vector<String> typed) {
         int limit = 0, test_k = 0, error = 0, typed_k = 0;
         // System.out.println(error);
-        /*for (int i=0; i<test.length; i++) {
-            System.out.println(test[i]);
+        /*for (int i=0; i<typed.size(); i++) {
+            System.out.println(typed.get(i));
         }*/
-
-        if (test.size() > typed.length) {
-            limit = typed.length;
-            error = test.size() - typed.length;
+        //System.out.println(test.size() + " " + typed.length);
+        if (test.size() >= typed.size()) {
+            limit = typed.size();
+            error = test.size() - typed.size();
         } else
             limit = test.size();
-
+        
+        //System.out.println(limit);
         while (test_k != limit) {
-            if (test.get(test_k).equals(typed[typed_k])) {
+            //System.out.println(test.get(test_k) + " " + test_k);
+            if (test.get(test_k).equals(typed.get(typed_k))) {
                 test_k++;
                 typed_k++;
                 continue;
@@ -145,22 +160,22 @@ public class Main {
                 /*
                  * error++; test_k++;
                  */
-                if (test_k < limit) {
-                    if (test.get(test_k + 1).equals(typed[typed_k + 1])) {
+                if (test_k < limit-1) {
+                    if (test.get(test_k + 1).equals(typed.get(typed_k + 1))) {
                         error++;
                         test_k++;
                         typed_k++;
                         continue;
                     } else {
                         if (test_k > 0) {
-                            if (test.get(test_k - 1).equals(typed[typed_k - 1])) {
+                            if (test.get(test_k - 1).equals(typed.get(typed_k - 1))) {
                                 // System.out.println("here");
                                 error += 1;
                                 test_k += 2;
                                 typed_k++;
                             }
                         } else {
-                            if (test.get(test_k + 2).equals(typed[typed_k + 1])) {
+                            if (test.get(test_k + 2).equals(typed.get(typed_k + 1))) {
                                 error += 1;
                                 test_k += 2;
                                 typed_k++;
