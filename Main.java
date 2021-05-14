@@ -106,15 +106,19 @@ public class Main {
         String typedWords = scan.nextLine();
         String typed[] = typedWords.split(" ");
         Vector <String> typedpsg = new Vector <String>(Arrays.asList(typed));
-        
-        while (true) {
-            if (typedpsg.get(0) == " ") {
+        //System.out.println(typedpsg.get(0) + " " + typedpsg.get(1));
+
+        boolean ws_flag = true;
+        while (ws_flag) {
+            //System.out.println("here-00");
+            if (typedpsg.get(0) == "") {
+                //System.out.println("here-01");
                 typedpsg.remove(0);
                 continue;
             }
-            break;
+            ws_flag = false;
         }
-
+        //System.out.println("here-02");
         for (int i = 0; i < typedpsg.size(); i++) {
             System.out.println(typedpsg.get(i));
         }
